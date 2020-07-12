@@ -1,0 +1,51 @@
+        SessionFactory sf = HibernateUtil.getSessionFactory();
+        Session sess = sf.openSession();
+        Transaction tx = null;
+        try {
+            tx = sess.beginTransaction();
+            //Code
+
+            tx.commit();
+        } catch (Exception e) {
+            if(tx!=null)
+                tx.rollback();
+        } finally {
+            sess.close();
+        }
+
+CODE:
++ findAll: 
+            Query q = sess.createQuery("from Customer");
+            list = q.list();
+
++ findListByID/Name:
+	-ID:
+	    Query q = sess.createQuery("from Sinhvien where lop.malop =:mlop");
+            q.setInteger("mlop", ml);
+	    q.setMaxResults(1); // limit 1 in SQL
+            list = q.list();
+
+	-Name:
+            Query q = sess.createQuery("from Sinhvien where hoten like :mlop");
+            q.setString("mlop", "Ng"+"%");
+            list = q.list();
+	
++ findByID:
+            cus = (Customer) sess.get(Customer.class, id);
+
++ insertCustomer:
+            sess.save(cus);
+
++ updateCustomer:
+            sess.saveOrUpdate(cus);
+
++ deleteCustomer:
+            Customer cus = (Customer) sess.get(Customer.class, id);
+            sess.delete(cus);
+
++ SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+Lay len: 
+	jTextFieldCREATEDDATE.setText(df.format(acc.getCreateDate()));
+	return df.format(c.getCreateDate());
+Lay xuong: 
+	Date createddate = df.parse(jTextFieldCREATEDDATE.getText());
